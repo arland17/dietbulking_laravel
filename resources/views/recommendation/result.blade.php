@@ -18,41 +18,29 @@
             <div class="mt-8">
                 <h2 class="text-2xl font-semibold text-gray-800">{{ $key }}</h2>
 
-                @if ($key == 'Olahraga')
-                    <!-- Tabel Olahraga -->
+                @if (str_contains($key, 'Olahraga'))
+                    <!-- Tabel Olahraga Diet/Bulking -->
                     <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
                         <thead>
                             <tr>
-                                @if (isset($data->first()->activities)) 
-                                    <!-- Tabel untuk Diet (memiliki kolom program, activities, dll) -->
-                                    <th class="border border-gray-400 px-4 py-2">Activities</th>
-                                    <th class="border border-gray-400 px-4 py-2">Schedule</th>
-                                    <th class="border border-gray-400 px-4 py-2">Notes</th>
-                                @else
-                                    <!-- Tabel untuk Bulking (hanya deskripsi) -->
-                                    <th class="border border-gray-400 px-4 py-2">Deskripsi</th>
-                                @endif
+                                <th class="border border-gray-400 px-4 py-2">Activities</th>
+                                <th class="border border-gray-400 px-4 py-2">Schedule</th>
+                                <th class="border border-gray-400 px-4 py-2">Notes</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data as $index => $item)
                                 <tr>
-                                    @if (isset($item->activities)) 
-                                        <!-- Menampilkan kolom untuk Diet -->
-                                        <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->activities)) !!}</td>
-                                        <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->schedule)) !!}</td>
-                                        <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->notes)) !!}</td>
-                                    @else
-                                        <!-- Menampilkan deskripsi untuk Bulking -->
-                                        <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->description)) !!}</td>
-                                    @endif
+                                    <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->activities)) !!}</td>
+                                    <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->schedule)) !!}</td>
+                                    <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->notes)) !!}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
 
-                @elseif ($key == 'Makanan Harian')
-                    <!-- Tabel Makanan Harian -->
+                @elseif (str_contains($key, 'Makanan Harian'))
+                    <!-- Tabel Makanan Harian Diet/Bulking -->
                     <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
                         <thead>
                             <tr>
@@ -74,8 +62,8 @@
                         </tbody>
                     </table>
 
-                @elseif ($key == 'Informasi Kalori')
-                    <!-- Tabel Informasi Kalori -->
+                @elseif (str_contains($key, 'Informasi Kalori'))
+                    <!-- Tabel Informasi Kalori Diet/Bulking -->
                     <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
                         <thead>
                             <tr>
@@ -97,8 +85,8 @@
                         </tbody>
                     </table>
 
-                @elseif ($key == 'Makronutrien')
-                    <!-- Tabel Makronutrien -->
+                @elseif (str_contains($key, 'Makronutrien'))
+                    <!-- Tabel Makronutrien Diet/Bulking -->
                     <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
                         <thead>
                             <tr>
@@ -114,8 +102,8 @@
                         </tbody>
                     </table>
 
-                @elseif ($key == 'Camilan')
-                    <!-- Tabel Camilan -->
+                @elseif (str_contains($key, 'Camilan'))
+                    <!-- Tabel Camilan Diet/Bulking -->
                     <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
                         <thead>
                             <tr>
@@ -131,8 +119,8 @@
                         </tbody>
                     </table>
 
-                @elseif ($key == 'Hidrasi')
-                    <!-- Tabel Hidrasi -->
+                @elseif (str_contains($key, 'Hidrasi'))
+                    <!-- Tabel Hidrasi Diet/Bulking -->
                     <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
                         <thead>
                             <tr>

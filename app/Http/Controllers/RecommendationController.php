@@ -2,126 +2,152 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\OlahragaDiet;
-use App\Models\OlahragaBulking;
-use App\Models\MakananHarianDiet;
-use App\Models\MakananHarianBulking;
-use App\Models\InformasiKaloriDiet;
-use App\Models\InformasiKaloriBulking;
-use App\Models\MakronutrienDiet;
-use App\Models\MakronutrienBulking;
 use App\Models\CamilanDiet;
-use App\Models\CamilanBulking;
 use App\Models\HidrasiDiet;
+use App\Models\OlahragaDiet;
+use Illuminate\Http\Request;
+use App\Models\CamilanBulking;
 use App\Models\HidrasiBulking;
+use App\Models\OlahragaBulking;
+use App\Models\MakronutrienDiet;
+use App\Models\MakananHarianDiet;
 use Illuminate\Routing\Controller;
+use App\Models\InformasiKaloriDiet;
+use App\Models\MakronutrienBulking;
+use App\Models\MakananHarianBulking;
+use App\Models\InformasiKaloriBulking;
 
 class RecommendationController extends Controller
 {
+    private $facts = [];
+    private $recommendations = [];
+    private $rules = [];
+
+    public function __construct()
+    {
+        // Aturan forward chaining berdasarkan spesifikasi Anda
+        $this->rules = [
+            // DIET RULES
+            [
+                'conditions' => ['tujuan' => 'diet', 'hobi' => 'yes'],
+                'conclusion' => 'Olahraga Diet',
+                'model' => OlahragaDiet::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'diet', 'rencana_makan' => 'yes'],
+                'conclusion' => 'Makanan Harian Diet',
+                'model' => MakananHarianDiet::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'diet', 'rencana_makan' => 'yes', 'kalori' => 'yes'],
+                'conclusion' => 'Informasi Kalori Diet',
+                'model' => InformasiKaloriDiet::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'diet', 'rencana_makan' => 'yes', 'makronutrien' => 'yes'],
+                'conclusion' => 'Makronutrien Diet',
+                'model' => MakronutrienDiet::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'diet', 'camilan' => 'yes'],
+                'conclusion' => 'Camilan Diet',
+                'model' => CamilanDiet::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'diet', 'hidrasi' => 'yes'],
+                'conclusion' => 'Hidrasi Diet',
+                'model' => HidrasiDiet::class,
+            ],
+
+            // BULKING RULES
+            [
+                'conditions' => ['tujuan' => 'bulking', 'hobi' => 'yes'],
+                'conclusion' => 'Olahraga Bulking',
+                'model' => OlahragaBulking::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'bulking', 'rencana_makan' => 'yes'],
+                'conclusion' => 'Makanan Harian Bulking',
+                'model' => MakananHarianBulking::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'bulking', 'rencana_makan' => 'yes', 'kalori' => 'yes'],
+                'conclusion' => 'Informasi Kalori Bulking',
+                'model' => InformasiKaloriBulking::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'bulking', 'rencana_makan' => 'yes', 'makronutrien' => 'yes'],
+                'conclusion' => 'Makronutrien Bulking',
+                'model' => MakronutrienBulking::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'bulking', 'camilan' => 'yes'],
+                'conclusion' => 'Camilan Bulking',
+                'model' => CamilanBulking::class,
+            ],
+            [
+                'conditions' => ['tujuan' => 'bulking', 'hidrasi' => 'yes'],
+                'conclusion' => 'Hidrasi Bulking',
+                'model' => HidrasiBulking::class,
+            ],
+        ];
+    }
+
     public function getRecommendation(Request $request)
-{
-    // Validasi input dari form
-    $validated = $request->validate([
-        'tujuan' => 'required|in:diet,bulking',
-        'hobi' => 'required|in:yes,no',
-        'rencana_makan' => 'required|in:yes,no',
-        'kalori' => 'required|in:yes,no',
-        'makronutrien' => 'required|in:yes,no',
-        'camilan' => 'required|in:yes,no',
-        'hidrasi' => 'required|in:yes,no',
-    ]);
+    {
+        // Validasi input dari form
+        $validated = $request->validate([
+            'tujuan' => 'required|in:diet,bulking',
+            'hobi' => 'required|in:yes,no',
+            'rencana_makan' => 'required|in:yes,no',
+            'kalori' => 'required|in:yes,no',
+            'makronutrien' => 'required|in:yes,no',
+            'camilan' => 'required|in:yes,no',
+            'hidrasi' => 'required|in:yes,no',
+        ]);
 
-    // Inisialisasi rekomendasi
-    $recommendations = [];
+        // Simpan fakta awal
+        $this->facts = $validated;
 
-    // Rekomendasi berdasarkan tujuan (diet atau bulking)
-    if ($validated['tujuan'] === 'diet') {
-        $recommendations = $this->generateDietRecommendations($validated);
-    } elseif ($validated['tujuan'] === 'bulking') {
-        $recommendations = $this->generateBulkingRecommendations($validated);
+        // Proses forward chaining untuk rekomendasi
+        $this->applyForwardChaining();
+
+        // Return hasil ke view
+        return view('recommendation.result', [
+            'recommendations' => $this->recommendations,
+        ]);
     }
 
-    // Return hasil ke view
-    return view('recommendation.result', [
-        'recommendations' => $recommendations,
-    ]);
-}
-
-private function generateDietRecommendations($input)
-{
-    $recommendations = [];
-
-    // Rekomendasi olahraga
-    if ($input['hobi'] === 'yes') {
-        $recommendations['Olahraga'] = OlahragaDiet::all();
-    }
-
-    // Rekomendasi makanan harian
-    if ($input['rencana_makan'] === 'yes') {
-        $recommendations['Makanan Harian'] = MakananHarianDiet::all();
-
-        // Informasi tambahan tentang kalori
-        if ($input['kalori'] === 'yes') {
-            $recommendations['Informasi Kalori'] = InformasiKaloriDiet::all();
-        }
-
-        // Informasi tambahan tentang makronutrien
-        if ($input['makronutrien'] === 'yes') {
-            $recommendations['Makronutrien'] = MakronutrienDiet::all();
+    private function applyForwardChaining()
+    {
+        foreach ($this->rules as $rule) {
+            // Cek apakah semua kondisi pada aturan terpenuhi
+            if ($this->conditionsAreMet($rule['conditions'])) {
+                // Ambil data dari model terkait dan tambahkan ke rekomendasi jika kondisi terpenuhi
+                $modelClass = $rule['model'];
+                
+                // Cek jika data ada (mungkin untuk beberapa model bisa kosong)
+                $modelData = $modelClass::all();  // Ambil seluruh data dari model
+                
+                // Tambahkan data model ke rekomendasi jika ada data yang ditemukan
+                if ($modelData->isNotEmpty()) {
+                    $this->recommendations[$rule['conclusion']] = $modelData;
+                } else {
+                    // Jika tidak ada data, beri pesan default
+                    $this->recommendations[$rule['conclusion']] = 'Tidak ada data untuk kategori ini.';
+                }
+            }
         }
     }
+    
 
-    // Rekomendasi camilan
-    if ($input['camilan'] === 'yes') {
-        $recommendations['Camilan'] = CamilanDiet::all();
-    }
-
-    // Panduan hidrasi
-    if ($input['hidrasi'] === 'yes') {
-        $recommendations['Hidrasi'] = HidrasiDiet::all();
-    }
-
-    // Jika tidak ada data, jangan masukkan kategori ke dalam hasil
-    return $recommendations;
-}
-
-private function generateBulkingRecommendations($input)
-{
-    $recommendations = [];
-
-    // Rekomendasi olahraga
-    if ($input['hobi'] === 'yes') {
-        $recommendations['Olahraga'] = OlahragaBulking::all();
-    }
-
-    // Rekomendasi makanan harian
-    if ($input['rencana_makan'] === 'yes') {
-        $recommendations['Makanan Harian'] = MakananHarianBulking::all();
-
-        // Informasi tambahan tentang kalori
-        if ($input['kalori'] === 'yes') {
-            $recommendations['Informasi Kalori'] = InformasiKaloriBulking::all();
+    private function conditionsAreMet($conditions)
+    {
+        foreach ($conditions as $key => $value) {
+            if (!isset($this->facts[$key]) || $this->facts[$key] !== $value) {
+                return false; // Kondisi tidak terpenuhi
+            }
         }
-
-        // Informasi tambahan tentang makronutrien
-        if ($input['makronutrien'] === 'yes') {
-            $recommendations['Makronutrien'] = MakronutrienBulking::all();
-        }
+        return true; // Semua kondisi terpenuhi
     }
-
-    // Rekomendasi camilan
-    if ($input['camilan'] === 'yes') {
-        $recommendations['Camilan'] = CamilanBulking::all();
-    }
-
-    // Panduan hidrasi
-    if ($input['hidrasi'] === 'yes') {
-        $recommendations['Hidrasi'] = HidrasiBulking::all();
-    }
-
-    // Jika tidak ada data, jangan masukkan kategori ke dalam hasil
-    return $recommendations;
-}
-
 }
