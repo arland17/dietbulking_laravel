@@ -6,13 +6,13 @@
 
         <div class="flex flex-col z-10 lg:flex-row items-center lg:justify-between mx-10 lg:mx-40 mt-0 relative">
             <div class="mt-6 lg:mt-0">
-                <img src="{{URL ('img/start.png')}}" alt="Diet & Bulking Icon" class="w-10/12 h-10/12 mx-auto lg:mx-0">
+                <img src="{{asset ('img/start.png')}}" alt="Diet & Bulking Icon" class="w-10/12 h-10/12 mx-auto lg:mx-0">
             </div>
             <div class="mt-6 lg:mt-6">
-                <img src="{{URL ('img/test.png')}}" alt="Diet & Bulking Icon" class="w-10/12 h-10/12 mx-auto lg:mx-0">
+                <img src="{{asset ('img/test.png')}}" alt="Diet & Bulking Icon" class="w-10/12 h-10/12 mx-auto lg:mx-0">
             </div>
             <div class="mt-6 lg:mt-6">
-              <img src="{{URL ('img/result.png')}}" alt="Diet & Bulking Icon" class="w-10/12 h-10/12 mx-auto lg:mx-0">
+              <img src="{{asset ('img/result.png')}}" alt="Diet & Bulking Icon" class="w-10/12 h-10/12 mx-auto lg:mx-0">
             </div>
           </div>
     </section>
@@ -24,11 +24,11 @@
             <div class="swiper-wrapper">
                 <!-- Slide 1 -->
                 <div class="swiper-slide flex justify-center items-center">
-                    <img src="{{URL ('img/food.png')}}" alt="Slide 1" class="w-11/12 lg:w-full object-cover">
+                    <img src="{{asset ('img/food.png')}}" alt="Slide 1" class="w-11/12 lg:w-full object-cover">
                 </div>
                 <!-- Slide 2 -->
                 <div class="swiper-slide flex justify-center items-center">
-                    <img src="{{URL ('img/gym.png')}}" alt="Slide 2" class="w-11/12 lg:w-full object-cover">
+                    <img src="{{asset ('img/gym.png')}}" alt="Slide 2" class="w-11/12 lg:w-full object-cover">
                 </div>
             </div>
 
