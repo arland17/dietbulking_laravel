@@ -39,12 +39,12 @@ class RecommendationController extends Controller
                 'model' => MakananHarianDiet::class,
             ],
             [
-                'conditions' => ['tujuan' => 'diet', 'rencana_makan' => 'yes', 'kalori' => 'yes'],
+                'conditions' => ['tujuan' => 'diet',  'kalori' => 'yes'],
                 'conclusion' => 'Informasi Kalori Diet',
                 'model' => InformasiKaloriDiet::class,
             ],
             [
-                'conditions' => ['tujuan' => 'diet', 'rencana_makan' => 'yes', 'makronutrien' => 'yes'],
+                'conditions' => ['tujuan' => 'diet', 'makronutrien' => 'yes'],
                 'conclusion' => 'Makronutrien Diet',
                 'model' => MakronutrienDiet::class,
             ],
@@ -71,12 +71,12 @@ class RecommendationController extends Controller
                 'model' => MakananHarianBulking::class,
             ],
             [
-                'conditions' => ['tujuan' => 'bulking', 'rencana_makan' => 'yes', 'kalori' => 'yes'],
+                'conditions' => ['tujuan' => 'bulking', 'kalori' => 'yes',],
                 'conclusion' => 'Informasi Kalori Bulking',
                 'model' => InformasiKaloriBulking::class,
             ],
             [
-                'conditions' => ['tujuan' => 'bulking', 'rencana_makan' => 'yes', 'makronutrien' => 'yes'],
+                'conditions' => ['tujuan' => 'bulking', 'makronutrien' => 'yes'],
                 'conclusion' => 'Makronutrien Bulking',
                 'model' => MakronutrienBulking::class,
             ],
