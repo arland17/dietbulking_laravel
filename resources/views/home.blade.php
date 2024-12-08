@@ -1,7 +1,7 @@
 <x-layout>
     <div class="bg-white p-6 relative h-screen ">
         
-        <img src="{{asset ('img/bg.png')}}" class="absolute w-3/12 z-0 bottom-0 top-0 right-0"> </img>
+        <img src="{{asset ('img/BG.png')}}" class="absolute w-3/12 z-0 bottom-0 top-0 right-0"> </img>
         
         <div class="flex flex-col z-10 lg:flex-row items-center lg:justify-between px-10 py-5 mt-0 relative">
           <!-- Text Section -->
@@ -12,7 +12,7 @@
           </div>
           <!-- Image Section -->
           <div class="mt-6 lg:mt-0">
-            <img src="{{asset ('img/logo 2.png')}}" alt="Diet & Bulking Icon" class="w-10/12 h-10/12 mx-auto lg:mx-0">
+            <img src="{{asset ('img/LOGO 2.png')}}" alt="Diet & Bulking Icon" class="w-10/12 h-10/12 mx-auto lg:mx-0">
           </div>
         </div>
         
