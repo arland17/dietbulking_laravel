@@ -6,7 +6,11 @@
     },
     "routes": [
         { "src": "/build/(.*)", "dest": "/public/build/" },
-        { "src": "/(.*)", "dest": "/api/index.php" }
+        { "src": "/(.*)", "dest": "/api/index.php" },
+        {
+            "src": "/img/(.*)",
+            "dest": "/public/img/"
+        }
     ],
     "public": true,
     "buildCommand": "vite build",
@@ -14,7 +18,7 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
-        "APP_URL": "http://dietandbulking-forwardchaining.test/home",
+        "APP_URL": "http://localhost",
         "APP_KEY": "base64:Gm22GTPagVBgTWDd5ax+EKhW2dAetHErbMILOCHSrf4=",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
