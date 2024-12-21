@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
     <title>Test</title>
 </head>
 
@@ -259,7 +259,7 @@
                         <!-- Submit Button -->
                         <div>
                             <button type="submit"
-                                class="w-2/12 mt-16 mb-10 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 justify-center">Continue</button>
+                                class="w-2/12 mt-16 mb-20 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 justify-center">Continue</button>
                         </div>
                     </form>
                 </div>

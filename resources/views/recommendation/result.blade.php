@@ -1,4 +1,3 @@
-a
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 
@@ -10,9 +9,9 @@ a
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <title>Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+    <title>Result</title>
 </head>
 
 <body class="h-full">
@@ -250,6 +249,9 @@ a
                             @elseif (str_contains($key, 'Hidrasi'))
                                 <!-- Tabel Hidrasi Diet/Bulking -->
                                 <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
+
+                                    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css"
+                                        rel="stylesheet">
                                     <thead>
                                         <tr>
                                             <th class="border border-gray-400 px-4 py-2">Deskripsi</th>
