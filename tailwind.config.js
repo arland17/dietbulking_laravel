@@ -14,6 +14,9 @@ export default {
             fontFamily: {
                 sans: ['Inter Var', ...defaultTheme.fontFamily.sans],
             },
+            screens: {
+                mobile: '1024px', // Pastikan ini sesuai dengan kebutuhan
+            },
         },
     },
     plugins: [],

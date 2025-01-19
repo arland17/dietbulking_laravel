@@ -95,183 +95,103 @@
             </div>
         </nav>
 
-        <div>
-            <div class="mx-auto sm:px-6 lg:px-0">
+        <div class="mx-auto sm:px-6 lg:px-0">
+            <div class="bg-white p-6">
+                <h1 class="text-4xl font-bold text-center lg:py-5 tracking-wide text-gray-900">Hasil Rekomendasi</h1>
 
-                <div class="bg-white p-6">
-                    <h1 class="text-4xl font-bold text-center lg:py-5 tracking-wide text-gray-900">Hasil Rekomendasi
-                    </h1>
+                <!-- Menampilkan pesan error jika ada -->
+                @if ($errors->any())
+                    <div class="bg-red-100 text-red-800 px-4 py-3 rounded">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-                    <!-- Menampilkan pesan error jika ada -->
-                    @if ($errors->any())
-                        <div class="bg-red-100 text-red-800 px-4 py-3 rounded">
-                            <ul class="list-disc list-inside">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                <!-- Menampilkan hasil rekomendasi -->
+                @foreach ($recommendations as $key => $data)
+                    <div class="mt-8">
+                        <h2 class="text-2xl font-semibold text-gray-800">{{ $key }}</h2>
 
-                    <!-- Menampilkan hasil rekomendasi -->
-                    @foreach ($recommendations as $key => $data)
-                        <div class="mt-8">
-                            <h2 class="text-2xl font-semibold text-gray-800">{{ $key }}</h2>
+                        @php
+                            $tableHeaders = [
+                                'Olahraga Diet (Gym dan Calisthenics)' => ['day', 'category', 'exercises', 'notes'],
+                                'Olahraga Bulking (Gym dan Calisthenics)' => ['day', 'category', 'exercises', 'notes'],
+                                'Olahraga Diet Gym' => ['day', 'category', 'exercises', 'notes'],
+                                'Olahraga Bulking Gym' => ['day', 'category', 'exercises', 'notes'],
+                                'Olahraga Diet Calisthenics' => ['day', 'category', 'exercises', 'notes'],
+                                'Olahraga Bulking Calisthenics' => ['day', 'category', 'exercises', 'notes'],
+                                'Makanan Harian Diet Laki-laki' => ['waktu', 'jenis', 'jumlah', 'keterangan'],
+                                'Makanan Harian Diet Perempuan' => ['waktu', 'jenis', 'jumlah', 'keterangan'],
+                                'Makanan Harian Bulking Laki-laki' => ['waktu', 'jenis', 'jumlah', 'keterangan'],
+                                'Makanan Harian Bulking Perempuan' => ['waktu', 'jenis', 'jumlah', 'keterangan'],
+                                'Informasi Kalori Diet Laki-laki' => ['total_kalori', 'makanan', 'snack', 'tambahan'],
+                                'Informasi Kalori Diet Perempuan' => ['total_kalori', 'makanan', 'snack', 'tambahan'],
+                                'Informasi Kalori Bulking Laki-laki' => ['total_kalori', 'makanan', 'snack', 'snack'],
+                                'Informasi Kalori Bulking Perempuan' => [
+                                    'total_kalori',
+                                    'makanan',
+                                    'snack',
+                                    'tambahan',
+                                ],
+                                'Makronutrien Diet Laki-laki' => ['description'],
+                                'Makronutrien Diet Perempuan' => ['description'],
+                                'Makronutrien Bulking Laki-laki' => ['description'],
+                                'Makronutrien Bulking Perempuan' => ['description'],
+                                'Camilan Diet' => ['description'],
+                                'Camilan Bulking' => ['description'],
+                                'Hidrasi Diet Laki-laki' => ['description'],
+                                'Hidrasi Diet Perempuan' => ['description'],
+                                'Hidrasi Bulking Laki-laki' => ['description'],
+                                'Hidrasi Bulking Perempuan' => ['description'],
+                            ];
+                        @endphp
 
-                            @if (str_contains($key, 'Olahraga Diet'))
-                                <!-- Tabel Olahraga untuk Diet -->
-                                <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
+                        <!-- Tabel untuk menampilkan data berdasarkan kategori yang sesuai dengan rules -->
+                        @if (array_key_exists($key, $tableHeaders))
+                            <div class="overflow-x-auto mt-4">
+                                <table class="table-auto border-collapse border border-gray-500 w-full">
                                     <thead>
                                         <tr>
-                                            <th class="border border-gray-400 px-4 py-2">Activities</th>
-                                            <th class="border border-gray-400 px-4 py-2">Schedule</th>
-                                            <th class="border border-gray-400 px-4 py-2">Notes</th>
+                                            @foreach ($tableHeaders[$key] as $column)
+                                                <th
+                                                    class="border border-gray-400 px-4 py-2 capitalize text-sm md:text-base">
+                                                    {{ str_replace('_', ' ', $column) }}</th>
+                                            @endforeach
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $item)
+                                        @if (is_array($data) && !empty($data))
+                                            @foreach ($data as $item)
+                                                <tr>
+                                                    @foreach ($tableHeaders[$key] as $column)
+                                                        <td
+                                                            class="border border-gray-400 px-4 py-2 text-sm md:text-base">
+                                                            {!! nl2br(e($item[$column] ?? 'N/A')) !!}
+                                                        </td>
+                                                    @endforeach
+                                                </tr>
+                                            @endforeach
+                                        @else
                                             <tr>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->activities)) !!}
-                                                </td>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->schedule)) !!}
-                                                </td>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->notes)) !!}
+                                                <td class="border border-gray-400 px-4 py-2 text-sm md:text-base"
+                                                    colspan="{{ count($tableHeaders[$key]) }}">
+                                                    Tidak ada data untuk kategori ini.
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
-                            @elseif (str_contains($key, 'Olahraga Bulking'))
-                                <!-- Tabel Olahraga untuk Bulking -->
-                                <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
-                                    <thead>
-                                        <tr>
-                                            <th class="border border-gray-400 px-4 py-2">Deskripsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $item)
-                                            <tr>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->description)) !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @endif
-
-                            @if (str_contains($key, 'Makanan Harian'))
-                                <!-- Tabel Makanan Harian Diet/Bulking -->
-                                <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
-                                    <thead>
-                                        <tr>
-                                            <th class="border border-gray-400 px-4 py-2">Waktu</th>
-                                            <th class="border border-gray-400 px-4 py-2">Jenis</th>
-                                            <th class="border border-gray-400 px-4 py-2">Jumlah</th>
-                                            <th class="border border-gray-400 px-4 py-2">Keterangan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $item)
-                                            <tr>
-                                                <td class="border border-gray-400 px-4 py-2 text-center">
-                                                    {{ $item->waktu }}</td>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->jenis)) !!}
-                                                </td>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->jumlah)) !!}
-                                                </td>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->keterangan)) !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @elseif (str_contains($key, 'Informasi Kalori'))
-                                <!-- Tabel Informasi Kalori Diet/Bulking -->
-                                <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
-                                    <thead>
-                                        <tr>
-                                            <th class="border border-gray-400 px-4 py-2">Total Kalori</th>
-                                            <th class="border border-gray-400 px-4 py-2">Makanan</th>
-                                            <th class="border border-gray-400 px-4 py-2">Snack</th>
-                                            <th class="border border-gray-400 px-4 py-2">Tambahan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $item)
-                                            <tr>
-                                                <td class="border border-gray-400 px-4 py-2 text-center">
-                                                    {{ $item->total_kalori }}</td>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->makanan)) !!}
-                                                </td>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->snack)) !!}
-                                                </td>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->tambahan)) !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @elseif (str_contains($key, 'Makronutrien'))
-                                <!-- Tabel Makronutrien Diet/Bulking -->
-                                <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
-                                    <thead>
-                                        <tr>
-                                            <th class="border border-gray-400 px-4 py-2">Deskripsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $item)
-                                            <tr>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->description)) !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @elseif (str_contains($key, 'Camilan'))
-                                <!-- Tabel Camilan Diet/Bulking -->
-                                <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
-                                    <thead>
-                                        <tr>
-                                            <th class="border border-gray-400 px-4 py-2">Deskripsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $item)
-                                            <tr>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->description)) !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @elseif (str_contains($key, 'Hidrasi'))
-                                <!-- Tabel Hidrasi Diet/Bulking -->
-                                <table class="table-auto border-collapse border border-gray-500 w-full mt-4">
-
-                                    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css"
-                                        rel="stylesheet">
-                                    <thead>
-                                        <tr>
-                                            <th class="border border-gray-400 px-4 py-2">Deskripsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($data as $item)
-                                            <tr>
-                                                <td class="border border-gray-400 px-4 py-2">{!! nl2br(e($item->description)) !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
             </div>
         </div>
+
+
     </div>
 
 </body>

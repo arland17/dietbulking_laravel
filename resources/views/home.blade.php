@@ -139,28 +139,26 @@
 
             <!-- Section 1 -->
             <section id="alurkerja" class="bg-white p-6">
-                <!-- Title Section -->
-                <h1 class="text-4xl font-bold text-center lg:py-5 text-gray-900">Alur Sistem Pakar Kerja D&B!</h1>
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center lg:py-5 text-gray-900">
+                    Alur Sistem Pakar Kerja D&B!
+                </h1>
 
                 <div
-                    class="flex flex-col z-10 lg:flex-row items-center lg:justify-between mx-10 lg:mx-40 mt-0 relative">
-                    <div class="mt-6 lg:mt-0">
-                        <img src="{{ asset('img/START.png') }}" alt="Diet & Bulking Icon"
-                            class="w-10/12 h-10/12 mx-auto lg:mx-0">
+                    class="flex flex-col lg:flex-row items-center justify-around mx-4 sm:mx-10 lg:mx-40 space-y-6 lg:space-y-0">
+                    <div class="w-full lg:w-1/3 flex justify-center">
+                        <img src="{{ asset('img/START.png') }}" alt="Start Icon" class="w-10/12 h-auto">
                     </div>
-                    <div class="mt-6 lg:mt-6">
-                        <img src="{{ asset('img/TEST.png') }}" alt="Diet & Bulking Icon"
-                            class="w-10/12 h-10/12 mx-auto lg:mx-0">
+                    <div class="w-full lg:w-1/3 flex justify-center">
+                        <img src="{{ asset('img/TEST.png') }}" alt="Test Icon" class="w-10/12 h-auto">
                     </div>
-                    <div class="mt-6 lg:mt-6">
-                        <img src="{{ asset('img/RESULT.png') }}" alt="Diet & Bulking Icon"
-                            class="w-10/12 h-10/12 mx-auto lg:mx-0">
+                    <div class="w-full lg:w-1/3 flex justify-center">
+                        <img src="{{ asset('img/RESULT.png') }}" alt="Result Icon" class="w-10/12 h-auto">
                     </div>
                 </div>
             </section>
 
             <!-- Section 2 -->
-            <section class="bg-gray-white mt-10">
+            <section class="bg-gray-white mt-10 px-4 sm:px-6 lg:px-8">
                 <div class="swiper mySwiper">
                     <!-- Carousel Container -->
                     <div class="swiper-wrapper">
@@ -195,11 +193,8 @@
                     },
                 });
             </script>
-
         </div>
     </div>
-    </div>
-
 </body>
 
 </html>

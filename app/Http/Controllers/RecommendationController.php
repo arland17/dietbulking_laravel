@@ -4,18 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\CamilanDiet;
 use App\Models\HidrasiDiet;
-use App\Models\OlahragaDiet;
 use Illuminate\Http\Request;
 use App\Models\CamilanBulking;
 use App\Models\HidrasiBulking;
-use App\Models\OlahragaBulking;
+use App\Models\OlahragaDietGym;
 use App\Models\MakronutrienDiet;
 use App\Models\MakananHarianDiet;
+use App\Models\OlahragaBulkingGym;
 use Illuminate\Routing\Controller;
 use App\Models\InformasiKaloriDiet;
 use App\Models\MakronutrienBulking;
+use App\Models\HidrasiDietPerempuan;
 use App\Models\MakananHarianBulking;
 use App\Models\InformasiKaloriBulking;
+use App\Models\HidrasiBulkingPerempuan;
+use App\Models\OlahragaDietCalisthenics;
+use App\Models\MakronutrienDietPerempuan;
+use App\Models\MakananHarianDietPerempuan;
+use App\Models\OlahragaBulkingCalisthenics;
+use App\Models\InformasiKaloriDietPerempuan;
+use App\Models\MakronutrienBulkingPerempuan;
+use App\Models\MakananHarianBulkingPerempuan;
+use App\Models\InformasiKaloriBulkingPerempuan;
 
 class RecommendationController extends Controller
 {
@@ -25,94 +35,152 @@ class RecommendationController extends Controller
 
     public function __construct()
     {
-        // Aturan forward chaining berdasarkan spesifikasi Anda
         $this->rules = [
             // DIET RULES
             [
-                'conditions' => ['tujuan' => 'diet', 'hobi' => 'yes'],
-                'conclusion' => 'Olahraga Diet',
-                'model' => OlahragaDiet::class,
+                'conditions' => ['jenis_kelamin' => ['laki-laki', 'perempuan'], 'T2' => 'Yes', 'T4' => 'Yes'],
+                'conclusion' => 'Olahraga Diet (Gym dan Calisthenics)',
+                'model' => [OlahragaDietGym::class, OlahragaDietCalisthenics::class],
             ],
             [
-                'conditions' => ['tujuan' => 'diet', 'rencana_makan' => 'yes'],
-                'conclusion' => 'Makanan Harian Diet',
+                'conditions' => ['jenis_kelamin' => ['laki-laki', 'perempuan'], 'T2' => 'Yes', 'T4' => 'Yes', 'T5' => 'Yes'],
+                'conclusion' => 'Olahraga Diet Gym',
+                'model' => OlahragaDietGym::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => ['laki-laki', 'perempuan'], 'T2' => 'Yes', 'T4' => 'Yes', 'T6' => 'Yes'],
+                'conclusion' => 'Olahraga Diet Calisthenics',
+                'model' => OlahragaDietCalisthenics::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'laki-laki', 'T2' => 'Yes', 'T7' => 'Yes'],
+                'conclusion' => 'Makanan Harian Diet Laki-laki',
                 'model' => MakananHarianDiet::class,
             ],
             [
-                'conditions' => ['tujuan' => 'diet',  'kalori' => 'yes'],
-                'conclusion' => 'Informasi Kalori Diet',
+                'conditions' => ['jenis_kelamin' => 'laki-laki', 'T2' => 'Yes', 'T8' => 'Yes'],
+                'conclusion' => 'Informasi Kalori Diet Laki-laki',
                 'model' => InformasiKaloriDiet::class,
             ],
             [
-                'conditions' => ['tujuan' => 'diet', 'makronutrien' => 'yes'],
-                'conclusion' => 'Makronutrien Diet',
+                'conditions' => ['jenis_kelamin' => 'laki-laki', 'T2' => 'Yes', 'T9' => 'Yes'],
+                'conclusion' => 'Makronutrien Diet Laki-laki',
                 'model' => MakronutrienDiet::class,
             ],
             [
-                'conditions' => ['tujuan' => 'diet', 'camilan' => 'yes'],
+                'conditions' => ['jenis_kelamin' => ['laki-laki', 'perempuan'], 'T2' => 'Yes', 'T10' => 'Yes'],
                 'conclusion' => 'Camilan Diet',
                 'model' => CamilanDiet::class,
             ],
             [
-                'conditions' => ['tujuan' => 'diet', 'hidrasi' => 'yes'],
-                'conclusion' => 'Hidrasi Diet',
+                'conditions' => ['jenis_kelamin' => 'laki-laki', 'T2' => 'Yes', 'T11' => 'Yes'],
+                'conclusion' => 'Hidrasi Diet Laki-laki',
                 'model' => HidrasiDiet::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'perempuan', 'T2' => 'Yes', 'T7' => 'Yes'],
+                'conclusion' => 'Makanan Harian Diet Perempuan',
+                'model' => MakananHarianDietPerempuan::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'perempuan', 'T2' => 'Yes', 'T8' => 'Yes'],
+                'conclusion' => 'Informasi Kalori Diet Perempuan',
+                'model' => InformasiKaloriDietPerempuan::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'perempuan', 'T2' => 'Yes', 'T9' => 'Yes'],
+                'conclusion' => 'Makronutrien Diet Perempuan',
+                'model' => MakronutrienDietPerempuan::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'perempuan', 'T2' => 'Yes', 'T11' => 'Yes'],
+                'conclusion' => 'Hidrasi Diet Perempuan',
+                'model' => HidrasiDietPerempuan::class,
             ],
 
             // BULKING RULES
             [
-                'conditions' => ['tujuan' => 'bulking', 'hobi' => 'yes'],
-                'conclusion' => 'Olahraga Bulking',
-                'model' => OlahragaBulking::class,
+                'conditions' => ['jenis_kelamin' => ['laki-laki', 'perempuan'], 'T3' => 'Yes', 'T4' => 'Yes'],
+                'conclusion' => 'Olahraga Bulking (Gym dan Calisthenics)',
+                'model' => [OlahragaBulkingGym::class, OlahragaBulkingCalisthenics::class],
             ],
             [
-                'conditions' => ['tujuan' => 'bulking', 'rencana_makan' => 'yes'],
-                'conclusion' => 'Makanan Harian Bulking',
+                'conditions' => ['jenis_kelamin' => ['laki-laki', 'perempuan'], 'T3' => 'Yes', 'T4' => 'Yes', 'T5' => 'Yes'],
+                'conclusion' => 'Olahraga Bulking Gym',
+                'model' => OlahragaBulkingGym::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => ['laki-laki', 'perempuan'], 'T3' => 'Yes', 'T4' => 'Yes', 'T6' => 'Yes'],
+                'conclusion' => 'Olahraga Bulking Calisthenics',
+                'model' => OlahragaBulkingCalisthenics::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'laki-laki', 'T3' => 'Yes', 'T7' => 'Yes'],
+                'conclusion' => 'Makanan Harian Bulking Laki-laki',
                 'model' => MakananHarianBulking::class,
             ],
             [
-                'conditions' => ['tujuan' => 'bulking', 'kalori' => 'yes',],
-                'conclusion' => 'Informasi Kalori Bulking',
+                'conditions' => ['jenis_kelamin' => 'laki-laki', 'T3' => 'Yes', 'T8' => 'Yes'],
+                'conclusion' => 'Informasi Kalori Bulking Laki-laki',
                 'model' => InformasiKaloriBulking::class,
             ],
             [
-                'conditions' => ['tujuan' => 'bulking', 'makronutrien' => 'yes'],
-                'conclusion' => 'Makronutrien Bulking',
+                'conditions' => ['jenis_kelamin' => 'laki-laki', 'T3' => 'Yes', 'T9' => 'Yes'],
+                'conclusion' => 'Makronutrien Bulking Laki-laki',
                 'model' => MakronutrienBulking::class,
             ],
             [
-                'conditions' => ['tujuan' => 'bulking', 'camilan' => 'yes'],
+                'conditions' => ['jenis_kelamin' => ['laki-laki', 'perempuan'], 'T3' => 'Yes', 'T10' => 'Yes'],
                 'conclusion' => 'Camilan Bulking',
                 'model' => CamilanBulking::class,
             ],
             [
-                'conditions' => ['tujuan' => 'bulking', 'hidrasi' => 'yes'],
-                'conclusion' => 'Hidrasi Bulking',
+                'conditions' => ['jenis_kelamin' => 'laki-laki', 'T3' => 'Yes', 'T11' => 'Yes'],
+                'conclusion' => 'Hidrasi Bulking Laki-laki',
                 'model' => HidrasiBulking::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'perempuan', 'T3' => 'Yes', 'T7' => 'Yes'],
+                'conclusion' => 'Makanan Harian Bulking Perempuan',
+                'model' => MakananHarianBulkingPerempuan::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'perempuan', 'T3' => 'Yes', 'T8' => 'Yes'],
+                'conclusion' => 'Informasi Kalori Bulking Perempuan',
+                'model' => InformasiKaloriBulkingPerempuan::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'perempuan', 'T3' => 'Yes', 'T9' => 'Yes'],
+                'conclusion' => 'Makronutrien Bulking Perempuan',
+                'model' => MakronutrienBulkingPerempuan::class,
+            ],
+            [
+                'conditions' => ['jenis_kelamin' => 'perempuan', 'T3' => 'Yes', 'T11' => 'Yes'],
+                'conclusion' => 'Hidrasi Bulking Perempuan',
+                'model' => HidrasiBulkingPerempuan::class,
             ],
         ];
     }
 
     public function getRecommendation(Request $request)
     {
-        // Validasi input dari form
         $validated = $request->validate([
-            'tujuan' => 'required|in:diet,bulking',
-            'hobi' => 'required|in:yes,no',
-            'rencana_makan' => 'required|in:yes,no',
-            'kalori' => 'required|in:yes,no',
-            'makronutrien' => 'required|in:yes,no',
-            'camilan' => 'required|in:yes,no',
-            'hidrasi' => 'required|in:yes,no',
+            'jenis_kelamin' => 'required|in:laki-laki,perempuan',
+            'T2' => 'required|in:Yes,No',
+            'T3' => 'required|in:Yes,No',
+            'T4' => 'required|in:Yes,No',
+            'T5' => 'required|in:Yes,No',
+            'T6' => 'required|in:Yes,No',
+            'T7' => 'required|in:Yes,No',
+            'T8' => 'required|in:Yes,No',
+            'T9' => 'required|in:Yes,No',
+            'T10' => 'required|in:Yes,No',
+            'T11' => 'required|in:Yes,No',
         ]);
 
-        // Simpan fakta awal
         $this->facts = $validated;
-
-        // Proses forward chaining untuk rekomendasi
         $this->applyForwardChaining();
 
-        // Return hasil ke view
         return view('recommendation.result', [
             'recommendations' => $this->recommendations,
         ]);
@@ -121,33 +189,31 @@ class RecommendationController extends Controller
     private function applyForwardChaining()
     {
         foreach ($this->rules as $rule) {
-            // Cek apakah semua kondisi pada aturan terpenuhi
             if ($this->conditionsAreMet($rule['conditions'])) {
-                // Ambil data dari model terkait dan tambahkan ke rekomendasi jika kondisi terpenuhi
-                $modelClass = $rule['model'];
-                
-                // Cek jika data ada (mungkin untuk beberapa model bisa kosong)
-                $modelData = $modelClass::all();  // Ambil seluruh data dari model
-                
-                // Tambahkan data model ke rekomendasi jika ada data yang ditemukan
-                if ($modelData->isNotEmpty()) {
-                    $this->recommendations[$rule['conclusion']] = $modelData;
-                } else {
-                    // Jika tidak ada data, beri pesan default
-                    $this->recommendations[$rule['conclusion']] = 'Tidak ada data untuk kategori ini.';
+                $modelClasses = (array) $rule['model'];
+                $data = [];
+                foreach ($modelClasses as $modelClass) {
+                    $modelData = $modelClass::all();
+                    if ($modelData->isNotEmpty()) {
+                        $data = array_merge($data, $modelData->toArray());
+                    }
                 }
+                $this->recommendations[$rule['conclusion']] = !empty($data) ? $data : 'Tidak ada data untuk kategori ini.';
             }
         }
     }
-    
 
     private function conditionsAreMet($conditions)
     {
         foreach ($conditions as $key => $value) {
-            if (!isset($this->facts[$key]) || $this->facts[$key] !== $value) {
-                return false; // Kondisi tidak terpenuhi
+            if (is_array($value)) {
+                if (!in_array($this->facts[$key], $value)) {
+                    return false;
+                }
+            } elseif (!isset($this->facts[$key]) || $this->facts[$key] !== $value) {
+                return false;
             }
         }
-        return true; // Semua kondisi terpenuhi
+        return true;
     }
 }
